@@ -1,0 +1,28 @@
+service: bms-fn-post
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  memorySize: 512
+  timeout: 30
+  region: us-east-1
+  environment:
+    MONGO_DB_USER: dbDeveloper
+    MONGO_DB_PASS: MHqaGjazwTDcGbu2
+    MONGO_DB_NAME: bmsDB
+    MONGO_DB_URL: mycluster.4rkjp.mongodb.net
+
+functions:
+  api-postEntity:
+    handler: handler.handler
+    events:
+      - http:
+          path: '/entity/{entity+}'
+          method: post
+          cors: true
+    vpc:
+      securityGroupIds:
+        - sg-052a937cde860e204
+      subnetIds:
+        - subnet-072cf3b4e06020799
