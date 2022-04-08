@@ -21,8 +21,3 @@ functions:
           path: '/entity/{entity+}'
           method: post
           cors: true
-    vpc:
-      securityGroupIds:
-        - sg-052a937cde860e204
-      subnetIds:
-        - subnet-072cf3b4e06020799

@@ -20,46 +20,27 @@ def register(body,entity):
         traceback.print_exc()
         print("No se encontró la colección en la base de datos: %s" %e)
     
-    if "key" in body:
-        key = body["key"]
-    else:
-        key = str(uuid.uuid1())
-        
-    
-    registerFound = mongodb_document(conn,key)
-    print("¿Se encontró key?: ", registerFound)
-    
-    if registerFound:
-        try:
-            body.pop("key")
-            collection.update({'key':key}, {'$push': {entity: body[entity]}}, upsert = True)
-            success = "true"
-            code = "00"
-            value = "Se registró satisfactoriamente."
-        except Exception as e:
-            print("Error al insertar documento en base de datos: %s" %e)
-    else:
-        try:
-            body.setdefault("key", key)
-            collection.insert_one(body)
-            success = "true"
-            code = "00"
-            value = "Se registró satisfactoriamente."
-        except Exception as e:
-            print("Error al insertar documento en base de datos: %s" %e)
+
+    key = str(uuid.uuid1())
+
+    try:
+        body.setdefault("key", key)
+        collection.insert_one(body)
+    except Exception as e:
+        print("Error al insertar documento en base de datos: %s" %e)
     
     conn.close() 
     
     response = {
         "key":key,
-        "success": success,
+        "success": "true",
         "configuration": {
             "meta": {
                 "status": {
-                    "code": code,
+                    "code": "00",
                     "message_ilgn": [{
                         "locale": "es_PE",
-                        "value": value
+                        "value": "Se registró satisfactoriamente."
                     }]
                 }
             }
